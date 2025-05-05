@@ -153,6 +153,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                                 <div class="quarto-categories">
                 <div class="quarto-category">nba</div>
                 <div class="quarto-category">basketball</div>
+                <div class="quarto-category">defense</div>
+                <div class="quarto-category">offense</div>
               </div>
                   </div>
   </div>
@@ -189,129 +191,83 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<p>The NBA used to be known for it’s hard fouling and lock down defense. Now teams put up over 110 points per game. Did players stop trying on defense or are the players too hard to defend now?</p>
+<p>Until a time machine is built and we can send current players back to play against former legends, we will have to look at stats to try and predict if defenses in the 80s and 90s were as good as people say.</p>
+<p>The NBA has transformed since the 90s. Offenses are shooting more threes than every, players like Stephen Curry, James Harden, Ray Allen, and Klay Thompson have been some of the biggest names to shoot the three well.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>nba_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">season =</span> <span class="fu">c</span>(<span class="st">"1985-86"</span>, <span class="st">"1986-87"</span>, <span class="st">"1987-88"</span>, <span class="st">"1988-89"</span>, <span class="st">"1989-90"</span>, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1990-91"</span>, <span class="st">"1991-92"</span>, <span class="st">"1992-93"</span>, <span class="st">"1993-94"</span>, <span class="st">"1994-95"</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1995-96"</span>, <span class="st">"1996-97"</span>, <span class="st">"1997-98"</span>, <span class="st">"1998-99"</span>, <span class="st">"1999-00"</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2000-01"</span>, <span class="st">"2001-02"</span>, <span class="st">"2002-03"</span>, <span class="st">"2003-04"</span>, <span class="st">"2004-05"</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2005-06"</span>, <span class="st">"2006-07"</span>, <span class="st">"2007-08"</span>, <span class="st">"2008-09"</span>, <span class="st">"2009-10"</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2010-11"</span>, <span class="st">"2011-12"</span>, <span class="st">"2012-13"</span>, <span class="st">"2013-14"</span>, <span class="st">"2014-15"</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2015-16"</span>, <span class="st">"2016-17"</span>, <span class="st">"2017-18"</span>, <span class="st">"2018-19"</span>, <span class="st">"2019-20"</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2020-21"</span>, <span class="st">"2021-22"</span>, <span class="st">"2022-23"</span>, <span class="st">"2023-24"</span>, <span class="st">"2024-25"</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">offense =</span> <span class="fu">c</span>(<span class="fl">111.3</span>, <span class="fl">113.6</span>, <span class="fl">113.4</span>, <span class="fl">113.8</span>, <span class="fl">112.0</span>, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>              <span class="fl">112.6</span>, <span class="fl">113.5</span>, <span class="fl">111.3</span>, <span class="fl">109.7</span>, <span class="fl">113.1</span>, </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>              <span class="fl">113.2</span>, <span class="fl">112.4</span>, <span class="fl">110.9</span>, <span class="fl">106.6</span>, <span class="fl">106.8</span>, </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>              <span class="fl">107.0</span>, <span class="fl">110.3</span>, <span class="fl">109.3</span>, <span class="fl">110.4</span>, <span class="fl">112.7</span>, </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>              <span class="fl">110.2</span>, <span class="fl">112.9</span>, <span class="fl">112.1</span>, <span class="fl">112.4</span>, <span class="fl">113.9</span>, </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>              <span class="fl">110.2</span>, <span class="fl">110.0</span>, <span class="fl">111.4</span>, <span class="fl">111.3</span>, <span class="fl">111.6</span>, </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>              <span class="fl">113.5</span>, <span class="fl">114.8</span>, <span class="fl">114.1</span>, <span class="fl">115.0</span>, <span class="fl">115.9</span>, </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="fl">117.3</span>, <span class="fl">116.2</span>, <span class="fl">118.6</span>, <span class="fl">122.2</span>, <span class="fl">121.0</span>),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">defense =</span> <span class="fu">c</span>(<span class="fl">101.1</span>, <span class="fl">102.2</span>, <span class="fl">101.6</span>, <span class="fl">100.0</span>, <span class="fl">102.9</span>, </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>              <span class="fl">101.8</span>, <span class="fl">102.6</span>, <span class="fl">98.2</span>, <span class="fl">96.7</span>, <span class="fl">102.3</span>, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>              <span class="fl">101.3</span>, <span class="fl">99.2</span>, <span class="fl">97.5</span>, <span class="fl">93.6</span>, <span class="fl">96.4</span>, </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>              <span class="fl">96.6</span>, <span class="fl">98.1</span>, <span class="fl">96.6</span>, <span class="fl">93.1</span>, <span class="fl">97.8</span>, </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>              <span class="fl">98.7</span>, <span class="fl">98.8</span>, <span class="fl">98.1</span>, <span class="fl">101.3</span>, <span class="fl">101.9</span>, </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>              <span class="fl">99.5</span>, <span class="fl">97.5</span>, <span class="fl">99.0</span>, <span class="fl">98.9</span>, <span class="fl">100.4</span>, </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>              <span class="fl">98.2</span>, <span class="fl">102.9</span>, <span class="fl">103.0</span>, <span class="fl">104.9</span>, <span class="fl">102.5</span>, </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>              <span class="fl">106.8</span>, <span class="fl">106.2</span>, <span class="fl">109.9</span>, <span class="fl">108.4</span>, <span class="fl">106.6</span>),</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">league_avg =</span> <span class="fu">c</span>(<span class="fl">107.2</span>, <span class="fl">108.3</span>, <span class="fl">108.0</span>, <span class="fl">107.8</span>, <span class="fl">108.1</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">107.9</span>, <span class="fl">108.2</span>, <span class="fl">108.0</span>, <span class="fl">106.3</span>, <span class="fl">108.3</span>,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">107.6</span>, <span class="fl">106.7</span>, <span class="fl">105.0</span>, <span class="fl">102.2</span>, <span class="fl">104.1</span>,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">103.0</span>, <span class="fl">104.5</span>, <span class="fl">103.6</span>, <span class="fl">102.9</span>, <span class="fl">106.1</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">106.2</span>, <span class="fl">106.5</span>, <span class="fl">107.5</span>, <span class="fl">108.3</span>, <span class="fl">107.6</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">107.3</span>, <span class="fl">104.6</span>, <span class="fl">105.8</span>, <span class="fl">106.6</span>, <span class="fl">105.6</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">106.4</span>, <span class="fl">108.8</span>, <span class="fl">108.6</span>, <span class="fl">110.4</span>, <span class="fl">110.6</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">112.3</span>, <span class="fl">112.0</span>, <span class="fl">114.8</span>, <span class="fl">115.3</span>, <span class="fl">114.5</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>my_caption <span class="ot">&lt;-</span> <span class="st">"basketball-reference  |  By: Aiden Feimer"</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>season <span class="ot">&lt;-</span> <span class="fu">factor</span>(nba_data<span class="sc">$</span>season, <span class="at">levels =</span> nba_data<span class="sc">$</span>season)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>nba_data_long <span class="ot">&lt;-</span> nba_data <span class="sc">%&gt;%</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(season, offense, defense, league_avg) <span class="sc">%&gt;%</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"offense"</span>, <span class="st">"defense"</span>, <span class="st">"league_avg"</span>), </span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"efficiency_type"</span>, </span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"rating"</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nba_data_long, <span class="fu">aes</span>(<span class="at">x =</span> season, <span class="at">y =</span> rating, <span class="at">group =</span> efficiency_type, <span class="at">color =</span> efficiency_type)) <span class="sc">+</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"offense"</span> <span class="ot">=</span> <span class="st">"#1d428a"</span>, <span class="st">"defense"</span> <span class="ot">=</span> <span class="st">"#c8102e"</span>, <span class="st">"league_avg"</span> <span class="ot">=</span> <span class="st">"#f58246"</span>),</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"offense"</span> <span class="ot">=</span> <span class="st">"Best Team Offensive Rating"</span>, </span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"defense"</span> <span class="ot">=</span> <span class="st">"Best Team Defensive Rating"</span>, </span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"league_avg"</span> <span class="ot">=</span> <span class="st">"League Average"</span>)) <span class="sc">+</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Have Analytics Ruined The NBA?"</span>,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"The NBA Has Turned Into An Analytical Game, Leading To The Best Offenses Ever"</span>,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Season"</span>,</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Efficiency Rating"</span>,</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Metric"</span>,</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> my_caption) <span class="sc">+</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'gridExtra'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:dplyr':
-
-    combine</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ lubridate 1.9.4     ✔ tibble    3.2.1
-✔ purrr     1.0.4     ✔ tidyr     1.3.1
-✔ readr     2.1.5     </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ gridExtra::combine() masks dplyr::combine()
-✖ dplyr::filter()      masks stats::filter()
-✖ dplyr::lag()         masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>nba_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">season =</span> <span class="fu">c</span>(<span class="st">"1985-86"</span>, <span class="st">"1986-87"</span>, <span class="st">"1987-88"</span>, <span class="st">"1988-89"</span>, <span class="st">"1989-90"</span>, </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1990-91"</span>, <span class="st">"1991-92"</span>, <span class="st">"1992-93"</span>, <span class="st">"1993-94"</span>, <span class="st">"1994-95"</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1995-96"</span>, <span class="st">"1996-97"</span>, <span class="st">"1997-98"</span>, <span class="st">"1998-99"</span>, <span class="st">"1999-00"</span>, </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2000-01"</span>, <span class="st">"2001-02"</span>, <span class="st">"2002-03"</span>, <span class="st">"2003-04"</span>, <span class="st">"2004-05"</span>, </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2005-06"</span>, <span class="st">"2006-07"</span>, <span class="st">"2007-08"</span>, <span class="st">"2008-09"</span>, <span class="st">"2009-10"</span>, </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2010-11"</span>, <span class="st">"2011-12"</span>, <span class="st">"2012-13"</span>, <span class="st">"2013-14"</span>, <span class="st">"2014-15"</span>, </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2015-16"</span>, <span class="st">"2016-17"</span>, <span class="st">"2017-18"</span>, <span class="st">"2018-19"</span>, <span class="st">"2019-20"</span>, </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2020-21"</span>, <span class="st">"2021-22"</span>, <span class="st">"2022-23"</span>, <span class="st">"2023-24"</span>, <span class="st">"2024-25"</span>),</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">offense =</span> <span class="fu">c</span>(<span class="fl">111.3</span>, <span class="fl">113.6</span>, <span class="fl">113.4</span>, <span class="fl">113.8</span>, <span class="fl">112.0</span>, </span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>              <span class="fl">112.6</span>, <span class="fl">113.5</span>, <span class="fl">111.3</span>, <span class="fl">109.7</span>, <span class="fl">113.1</span>, </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>              <span class="fl">113.2</span>, <span class="fl">112.4</span>, <span class="fl">110.9</span>, <span class="fl">106.6</span>, <span class="fl">106.8</span>, </span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>              <span class="fl">107.0</span>, <span class="fl">110.3</span>, <span class="fl">109.3</span>, <span class="fl">110.4</span>, <span class="fl">112.7</span>, </span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>              <span class="fl">110.2</span>, <span class="fl">112.9</span>, <span class="fl">112.1</span>, <span class="fl">112.4</span>, <span class="fl">113.9</span>, </span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>              <span class="fl">110.2</span>, <span class="fl">110.0</span>, <span class="fl">111.4</span>, <span class="fl">111.3</span>, <span class="fl">111.6</span>, </span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>              <span class="fl">113.5</span>, <span class="fl">114.8</span>, <span class="fl">114.1</span>, <span class="fl">115.0</span>, <span class="fl">115.9</span>, </span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>              <span class="fl">117.3</span>, <span class="fl">116.2</span>, <span class="fl">118.6</span>, <span class="fl">122.2</span>, <span class="fl">121.0</span>),</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">defense =</span> <span class="fu">c</span>(<span class="fl">101.1</span>, <span class="fl">102.2</span>, <span class="fl">101.6</span>, <span class="fl">100.0</span>, <span class="fl">102.9</span>, </span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>              <span class="fl">101.8</span>, <span class="fl">102.6</span>, <span class="fl">98.2</span>, <span class="fl">96.7</span>, <span class="fl">102.3</span>, </span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>              <span class="fl">101.3</span>, <span class="fl">99.2</span>, <span class="fl">97.5</span>, <span class="fl">93.6</span>, <span class="fl">96.4</span>, </span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>              <span class="fl">96.6</span>, <span class="fl">98.1</span>, <span class="fl">96.6</span>, <span class="fl">93.1</span>, <span class="fl">97.8</span>, </span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>              <span class="fl">98.7</span>, <span class="fl">98.8</span>, <span class="fl">98.1</span>, <span class="fl">101.3</span>, <span class="fl">101.9</span>, </span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>              <span class="fl">99.5</span>, <span class="fl">97.5</span>, <span class="fl">99.0</span>, <span class="fl">98.9</span>, <span class="fl">100.4</span>, </span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>              <span class="fl">98.2</span>, <span class="fl">102.9</span>, <span class="fl">103.0</span>, <span class="fl">104.9</span>, <span class="fl">102.5</span>, </span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>              <span class="fl">106.8</span>, <span class="fl">106.2</span>, <span class="fl">109.9</span>, <span class="fl">108.4</span>, <span class="fl">106.6</span>),</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">league_avg =</span> <span class="fu">c</span>(<span class="fl">107.2</span>, <span class="fl">108.3</span>, <span class="fl">108.0</span>, <span class="fl">107.8</span>, <span class="fl">108.1</span>,</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">107.9</span>, <span class="fl">108.2</span>, <span class="fl">108.0</span>, <span class="fl">106.3</span>, <span class="fl">108.3</span>,</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">107.6</span>, <span class="fl">106.7</span>, <span class="fl">105.0</span>, <span class="fl">102.2</span>, <span class="fl">104.1</span>,</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">103.0</span>, <span class="fl">104.5</span>, <span class="fl">103.6</span>, <span class="fl">102.9</span>, <span class="fl">106.1</span>,</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">106.2</span>, <span class="fl">106.5</span>, <span class="fl">107.5</span>, <span class="fl">108.3</span>, <span class="fl">107.6</span>,</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">107.3</span>, <span class="fl">104.6</span>, <span class="fl">105.8</span>, <span class="fl">106.6</span>, <span class="fl">105.6</span>,</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">106.4</span>, <span class="fl">108.8</span>, <span class="fl">108.6</span>, <span class="fl">110.4</span>, <span class="fl">110.6</span>,</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">112.3</span>, <span class="fl">112.0</span>, <span class="fl">114.8</span>, <span class="fl">115.3</span>, <span class="fl">114.5</span>)</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>my_caption <span class="ot">&lt;-</span> <span class="st">"basketball-reference  |  By: Aiden Feimer"</span></span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>season <span class="ot">&lt;-</span> <span class="fu">factor</span>(nba_data<span class="sc">$</span>season, <span class="at">levels =</span> nba_data<span class="sc">$</span>season)</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>nba_data_long <span class="ot">&lt;-</span> nba_data <span class="sc">%&gt;%</span></span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(season, offense, defense, league_avg) <span class="sc">%&gt;%</span></span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"offense"</span>, <span class="st">"defense"</span>, <span class="st">"league_avg"</span>), </span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"efficiency_type"</span>, </span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"rating"</span>)</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nba_data_long, <span class="fu">aes</span>(<span class="at">x =</span> season, <span class="at">y =</span> rating, <span class="at">group =</span> efficiency_type, <span class="at">color =</span> efficiency_type)) <span class="sc">+</span></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"offense"</span> <span class="ot">=</span> <span class="st">"#1d428a"</span>, <span class="st">"defense"</span> <span class="ot">=</span> <span class="st">"#c8102e"</span>, <span class="st">"league_avg"</span> <span class="ot">=</span> <span class="st">"#f58246"</span>),</span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"offense"</span> <span class="ot">=</span> <span class="st">"Best Team Offensive Rating"</span>, </span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"defense"</span> <span class="ot">=</span> <span class="st">"Best Team Defensive Rating"</span>, </span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"league_avg"</span> <span class="ot">=</span> <span class="st">"League Average"</span>)) <span class="sc">+</span></span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Have Analytics Ruined The NBA?"</span>,</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"The NBA Has Turned Into An Analytical Game, Leading To The Best Offenses Ever"</span>,</span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Season"</span>,</span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Efficiency Rating"</span>,</span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"Metric"</span>,</span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> my_caption) <span class="sc">+</span></span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
-<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` instead.</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -320,78 +276,81 @@ Attaching package: 'gridExtra'</code></pre>
 </div>
 </div>
 </div>
+<p>The NBA saw some of the best defensive efficiency in the 90s through mid 2000s.This era was talked about as the best defensive era in NBA history. The graph shows the average rise over the past 20 years.</p>
+<p>Analytics became a huge part of the game over the past 20 years. Training has evolved and the game has evolved with it. It’s all about finding the most efficient way to score the basketball.</p>
+<p>The game that once saw lots of mid range shots and shots around the rim, the shot selection has moved back over the years.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nba_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">decade =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"1980s"</span>, <span class="st">"1990s"</span>, <span class="st">"2000s"</span>, <span class="st">"2010s"</span>, <span class="st">"2020s"</span>), </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1980s"</span>, <span class="st">"1990s"</span>, <span class="st">"2000s"</span>, <span class="st">"2010s"</span>, <span class="st">"2020s"</span>)),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">threes =</span> <span class="fu">c</span>(<span class="fl">5.2</span>, <span class="fl">12.1</span>, <span class="fl">16.1</span>, <span class="fl">22.8</span>, <span class="fl">35.3</span>),</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">twos =</span> <span class="fu">c</span>(<span class="fl">83.0</span>, <span class="fl">70.5</span>, <span class="fl">64.5</span>, <span class="fl">53.6</span>, <span class="fl">53.2</span>),</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fts =</span> <span class="fu">c</span>(<span class="fl">29.4</span>, <span class="fl">26.5</span>, <span class="fl">25.0</span>, <span class="fl">20.5</span>, <span class="fl">22.1</span>),</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">possessions =</span> <span class="fu">c</span>(<span class="fl">100.3</span>, <span class="fl">93.3</span>, <span class="fl">91.3</span>, <span class="fl">95.2</span>, <span class="fl">98.8</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>threes_min <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>twos_min <span class="ot">&lt;-</span> <span class="dv">40</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>fts_min <span class="ot">&lt;-</span> <span class="dv">15</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>possessions_min <span class="ot">&lt;-</span> <span class="dv">85</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>my_caption <span class="ot">&lt;-</span> <span class="st">"basketball-reference  |  By: Aiden Feimer"</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>threes_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> threes)) <span class="sc">+</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#1d428a"</span>) <span class="sc">+</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"3-Point Attempts per Game"</span>,</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Attempts per Game"</span>) <span class="sc">+</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(threes_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>)</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>twos_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> twos)) <span class="sc">+</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#c8102e"</span>) <span class="sc">+</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"2-Point Attempts per Game"</span>,</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Attempts per Game"</span>) <span class="sc">+</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(twos_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>)</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>fts_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> fts)) <span class="sc">+</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#f58246"</span>) <span class="sc">+</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Free Throw Attempts per Game"</span>,</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Attempts per Game"</span>) <span class="sc">+</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(fts_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>)</span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>possessions_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> possessions)) <span class="sc">+</span></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#666666"</span>) <span class="sc">+</span></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Possessions per Game"</span>,</span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Possessions per Game"</span>,</span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> my_caption) <span class="sc">+</span></span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(possessions_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(</span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>  threes_plot, twos_plot, </span>
-<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>  fts_plot, possessions_plot, </span>
-<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">2</span>, </span>
-<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">top =</span> <span class="st">"The Three Ball Is Taking Over"</span></span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nba_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">decade =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"1980s"</span>, <span class="st">"1990s"</span>, <span class="st">"2000s"</span>, <span class="st">"2010s"</span>, <span class="st">"2020s"</span>), </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1980s"</span>, <span class="st">"1990s"</span>, <span class="st">"2000s"</span>, <span class="st">"2010s"</span>, <span class="st">"2020s"</span>)),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">threes =</span> <span class="fu">c</span>(<span class="fl">5.2</span>, <span class="fl">12.1</span>, <span class="fl">16.1</span>, <span class="fl">22.8</span>, <span class="fl">35.3</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">twos =</span> <span class="fu">c</span>(<span class="fl">83.0</span>, <span class="fl">70.5</span>, <span class="fl">64.5</span>, <span class="fl">53.6</span>, <span class="fl">53.2</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fts =</span> <span class="fu">c</span>(<span class="fl">29.4</span>, <span class="fl">26.5</span>, <span class="fl">25.0</span>, <span class="fl">20.5</span>, <span class="fl">22.1</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">possessions =</span> <span class="fu">c</span>(<span class="fl">100.3</span>, <span class="fl">93.3</span>, <span class="fl">91.3</span>, <span class="fl">95.2</span>, <span class="fl">98.8</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>threes_min <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>twos_min <span class="ot">&lt;-</span> <span class="dv">40</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>fts_min <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>possessions_min <span class="ot">&lt;-</span> <span class="dv">85</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>my_caption <span class="ot">&lt;-</span> <span class="st">"basketball-reference  |  By: Aiden Feimer"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>threes_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> threes)) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#1d428a"</span>) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"3-Point Attempts per Game"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Attempts per Game"</span>) <span class="sc">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(threes_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>twos_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> twos)) <span class="sc">+</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#c8102e"</span>) <span class="sc">+</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"2-Point Attempts per Game"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Attempts per Game"</span>) <span class="sc">+</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(twos_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>fts_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> fts)) <span class="sc">+</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#f58246"</span>) <span class="sc">+</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Free Throw Attempts per Game"</span>,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Attempts per Game"</span>) <span class="sc">+</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(fts_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>)</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>possessions_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> possessions)) <span class="sc">+</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"#666666"</span>) <span class="sc">+</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Possessions per Game"</span>,</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Decade"</span>,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Possessions per Game"</span>,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> my_caption) <span class="sc">+</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(possessions_min, <span class="cn">NA</span>)) <span class="sc">+</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>  threes_plot, twos_plot, </span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>  fts_plot, possessions_plot, </span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">2</span>, </span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">top =</span> <span class="st">"The Three Ball Is Taking Over"</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -401,70 +360,73 @@ Attaching package: 'gridExtra'</code></pre>
 </div>
 </div>
 </div>
+<p>The first thing to look at is shot selection. Three pointers went from just being attempted around five times per game to over six times that in the last 40 plus years.</p>
+<p>The NBA had a fast pace in the 80s with each team having over 100 possessions per game. The pace slowly dropped to it’s lowest ever in the 2000s. With the three pointer popularized in the early 2010s the pace picked up.</p>
+<p>It turned into finding the first open guy to get a shot up from three. With faster possessions and the shot selection favoring a shot that got you more points than inside the three-point line, the game saw more scoring than ever before.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>seasons <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"1984-85"</span>, <span class="st">"1985-86"</span>, <span class="st">"1986-87"</span>, <span class="st">"1987-88"</span>, <span class="st">"1988-89"</span>, <span class="st">"1989-90"</span>, </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1990-91"</span>, <span class="st">"1991-92"</span>, <span class="st">"1992-93"</span>, <span class="st">"1993-94"</span>, <span class="st">"1994-95"</span>, <span class="st">"1995-96"</span>, </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1996-97"</span>, <span class="st">"1997-98"</span>, <span class="st">"1998-99"</span>, <span class="st">"1999-00"</span>, <span class="st">"2000-01"</span>, <span class="st">"2001-02"</span>, </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2002-03"</span>, <span class="st">"2003-04"</span>, <span class="st">"2004-05"</span>, <span class="st">"2005-06"</span>, <span class="st">"2006-07"</span>, <span class="st">"2007-08"</span>, </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2008-09"</span>, <span class="st">"2009-10"</span>, <span class="st">"2010-11"</span>, <span class="st">"2011-12"</span>, <span class="st">"2012-13"</span>, <span class="st">"2013-14"</span>, </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2014-15"</span>, <span class="st">"2015-16"</span>, <span class="st">"2016-17"</span>, <span class="st">"2017-18"</span>, <span class="st">"2018-19"</span>, <span class="st">"2019-20"</span>, </span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2020-21"</span>, <span class="st">"2021-22"</span>, <span class="st">"2022-23"</span>, <span class="st">"2023-24"</span>, <span class="st">"2024-25"</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>pace <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">102.1</span>, <span class="fl">102.1</span>, <span class="fl">100.8</span>, <span class="fl">99.6</span>, <span class="fl">100.6</span>, <span class="fl">98.3</span>, <span class="fl">97.8</span>, <span class="fl">96.6</span>, <span class="fl">96.8</span>, <span class="fl">95.1</span>, </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>          <span class="fl">92.9</span>, <span class="fl">91.8</span>, <span class="fl">90.1</span>, <span class="fl">90.3</span>, <span class="fl">88.9</span>, <span class="fl">93.1</span>, <span class="fl">91.3</span>, <span class="fl">90.7</span>, <span class="fl">91.0</span>, <span class="fl">90.1</span>, </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>          <span class="fl">90.9</span>, <span class="fl">90.5</span>, <span class="fl">91.9</span>, <span class="fl">92.4</span>, <span class="fl">91.7</span>, <span class="fl">92.7</span>, <span class="fl">92.1</span>, <span class="fl">91.3</span>, <span class="fl">92.0</span>, <span class="fl">93.9</span>, </span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>          <span class="fl">93.9</span>, <span class="fl">95.8</span>, <span class="fl">96.4</span>, <span class="fl">97.3</span>, <span class="fl">100.0</span>, <span class="fl">100.3</span>, <span class="fl">99.2</span>, <span class="fl">98.2</span>, <span class="fl">99.2</span>, <span class="fl">98.5</span>, <span class="fl">98.8</span>)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>ppp <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.085</span>, <span class="fl">1.079</span>, <span class="fl">1.090</span>, <span class="fl">1.086</span>, <span class="fl">1.085</span>, <span class="fl">1.089</span>, <span class="fl">1.087</span>, <span class="fl">1.090</span>, <span class="fl">1.088</span>, <span class="fl">1.067</span>, </span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>         <span class="fl">1.092</span>, <span class="fl">1.084</span>, <span class="fl">1.075</span>, <span class="fl">1.059</span>, <span class="fl">1.030</span>, <span class="fl">1.047</span>, <span class="fl">1.038</span>, <span class="fl">1.053</span>, <span class="fl">1.045</span>, <span class="fl">1.037</span>, </span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>         <span class="fl">1.069</span>, <span class="fl">1.072</span>, <span class="fl">1.074</span>, <span class="fl">1.081</span>, <span class="fl">1.091</span>, <span class="fl">1.083</span>, <span class="fl">1.081</span>, <span class="fl">1.055</span>, <span class="fl">1.066</span>, <span class="fl">1.076</span>, </span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>         <span class="fl">1.065</span>, <span class="fl">1.072</span>, <span class="fl">1.095</span>, <span class="fl">1.093</span>, <span class="fl">1.112</span>, <span class="fl">1.115</span>, <span class="fl">1.130</span>, <span class="fl">1.126</span>, <span class="fl">1.156</span>, <span class="fl">1.159</span>, <span class="fl">1.152</span>)</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>nba_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Season =</span> seasons,</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pace =</span> pace,</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">PPP =</span> ppp</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade <span class="ot">&lt;-</span> <span class="fu">substr</span>(nba_data<span class="sc">$</span>Season, <span class="dv">1</span>, <span class="dv">3</span>)</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"198"</span>] <span class="ot">&lt;-</span> <span class="st">"1980s"</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"199"</span>] <span class="ot">&lt;-</span> <span class="st">"1990s"</span></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"200"</span>] <span class="ot">&lt;-</span> <span class="st">"2000s"</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"201"</span>] <span class="ot">&lt;-</span> <span class="st">"2010s"</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"202"</span>] <span class="ot">&lt;-</span> <span class="st">"2020s"</span></span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade <span class="ot">&lt;-</span> <span class="fu">factor</span>(nba_data<span class="sc">$</span>Decade, </span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1980s"</span>, <span class="st">"1990s"</span>, <span class="st">"2000s"</span>, <span class="st">"2010s"</span>, <span class="st">"2020s"</span>))</span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>seasons_to_label <span class="ot">&lt;-</span> nba_data <span class="sc">%&gt;%</span></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Season <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"1998-99"</span>, <span class="st">"2023-24"</span>))</span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>custom_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1980s"</span> <span class="ot">=</span> <span class="st">"#1d428a"</span>,  <span class="co"># Blue</span></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1990s"</span> <span class="ot">=</span> <span class="st">"#c8102e"</span>,  <span class="co"># Red</span></span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2000s"</span> <span class="ot">=</span> <span class="st">"#f58246"</span>,  <span class="co"># Orange</span></span>
-<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2010s"</span> <span class="ot">=</span> <span class="st">"#666666"</span>,  <span class="co"># Gray</span></span>
-<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2020s"</span> <span class="ot">=</span> <span class="st">"#06402b"</span>   <span class="co"># Green</span></span>
-<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>my_caption <span class="ot">&lt;-</span> <span class="st">"basketball-reference  |  By: Aiden Feimer"</span></span>
-<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> Pace, <span class="at">y =</span> PPP)) <span class="sc">+</span></span>
-<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Decade), <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> custom_colors, <span class="at">name =</span> <span class="st">"Decade"</span>) <span class="sc">+</span></span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> seasons_to_label, </span>
-<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">label =</span> Season), </span>
-<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.3</span>, </span>
-<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="fl">0.5</span>,</span>
-<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">3.5</span>,</span>
-<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Pre-2000 Defenses Wouldn't Be Able To Handle Today's Offenses"</span>,</span>
-<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Teams Today Are Too Efficient For Early NBA Defenses"</span>,</span>
-<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Pace (Possessions per 48 minutes)"</span>,</span>
-<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Points Per Possession"</span>,</span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> my_caption</span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
-<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
-<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>seasons <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"1984-85"</span>, <span class="st">"1985-86"</span>, <span class="st">"1986-87"</span>, <span class="st">"1987-88"</span>, <span class="st">"1988-89"</span>, <span class="st">"1989-90"</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1990-91"</span>, <span class="st">"1991-92"</span>, <span class="st">"1992-93"</span>, <span class="st">"1993-94"</span>, <span class="st">"1994-95"</span>, <span class="st">"1995-96"</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="st">"1996-97"</span>, <span class="st">"1997-98"</span>, <span class="st">"1998-99"</span>, <span class="st">"1999-00"</span>, <span class="st">"2000-01"</span>, <span class="st">"2001-02"</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2002-03"</span>, <span class="st">"2003-04"</span>, <span class="st">"2004-05"</span>, <span class="st">"2005-06"</span>, <span class="st">"2006-07"</span>, <span class="st">"2007-08"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2008-09"</span>, <span class="st">"2009-10"</span>, <span class="st">"2010-11"</span>, <span class="st">"2011-12"</span>, <span class="st">"2012-13"</span>, <span class="st">"2013-14"</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2014-15"</span>, <span class="st">"2015-16"</span>, <span class="st">"2016-17"</span>, <span class="st">"2017-18"</span>, <span class="st">"2018-19"</span>, <span class="st">"2019-20"</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"2020-21"</span>, <span class="st">"2021-22"</span>, <span class="st">"2022-23"</span>, <span class="st">"2023-24"</span>, <span class="st">"2024-25"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>pace <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">102.1</span>, <span class="fl">102.1</span>, <span class="fl">100.8</span>, <span class="fl">99.6</span>, <span class="fl">100.6</span>, <span class="fl">98.3</span>, <span class="fl">97.8</span>, <span class="fl">96.6</span>, <span class="fl">96.8</span>, <span class="fl">95.1</span>, </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>          <span class="fl">92.9</span>, <span class="fl">91.8</span>, <span class="fl">90.1</span>, <span class="fl">90.3</span>, <span class="fl">88.9</span>, <span class="fl">93.1</span>, <span class="fl">91.3</span>, <span class="fl">90.7</span>, <span class="fl">91.0</span>, <span class="fl">90.1</span>, </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>          <span class="fl">90.9</span>, <span class="fl">90.5</span>, <span class="fl">91.9</span>, <span class="fl">92.4</span>, <span class="fl">91.7</span>, <span class="fl">92.7</span>, <span class="fl">92.1</span>, <span class="fl">91.3</span>, <span class="fl">92.0</span>, <span class="fl">93.9</span>, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>          <span class="fl">93.9</span>, <span class="fl">95.8</span>, <span class="fl">96.4</span>, <span class="fl">97.3</span>, <span class="fl">100.0</span>, <span class="fl">100.3</span>, <span class="fl">99.2</span>, <span class="fl">98.2</span>, <span class="fl">99.2</span>, <span class="fl">98.5</span>, <span class="fl">98.8</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>ppp <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.085</span>, <span class="fl">1.079</span>, <span class="fl">1.090</span>, <span class="fl">1.086</span>, <span class="fl">1.085</span>, <span class="fl">1.089</span>, <span class="fl">1.087</span>, <span class="fl">1.090</span>, <span class="fl">1.088</span>, <span class="fl">1.067</span>, </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>         <span class="fl">1.092</span>, <span class="fl">1.084</span>, <span class="fl">1.075</span>, <span class="fl">1.059</span>, <span class="fl">1.030</span>, <span class="fl">1.047</span>, <span class="fl">1.038</span>, <span class="fl">1.053</span>, <span class="fl">1.045</span>, <span class="fl">1.037</span>, </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>         <span class="fl">1.069</span>, <span class="fl">1.072</span>, <span class="fl">1.074</span>, <span class="fl">1.081</span>, <span class="fl">1.091</span>, <span class="fl">1.083</span>, <span class="fl">1.081</span>, <span class="fl">1.055</span>, <span class="fl">1.066</span>, <span class="fl">1.076</span>, </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>         <span class="fl">1.065</span>, <span class="fl">1.072</span>, <span class="fl">1.095</span>, <span class="fl">1.093</span>, <span class="fl">1.112</span>, <span class="fl">1.115</span>, <span class="fl">1.130</span>, <span class="fl">1.126</span>, <span class="fl">1.156</span>, <span class="fl">1.159</span>, <span class="fl">1.152</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>nba_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Season =</span> seasons,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">Pace =</span> pace,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">PPP =</span> ppp</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade <span class="ot">&lt;-</span> <span class="fu">substr</span>(nba_data<span class="sc">$</span>Season, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"198"</span>] <span class="ot">&lt;-</span> <span class="st">"1980s"</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"199"</span>] <span class="ot">&lt;-</span> <span class="st">"1990s"</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"200"</span>] <span class="ot">&lt;-</span> <span class="st">"2000s"</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"201"</span>] <span class="ot">&lt;-</span> <span class="st">"2010s"</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade[nba_data<span class="sc">$</span>Decade <span class="sc">==</span> <span class="st">"202"</span>] <span class="ot">&lt;-</span> <span class="st">"2020s"</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>nba_data<span class="sc">$</span>Decade <span class="ot">&lt;-</span> <span class="fu">factor</span>(nba_data<span class="sc">$</span>Decade, </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1980s"</span>, <span class="st">"1990s"</span>, <span class="st">"2000s"</span>, <span class="st">"2010s"</span>, <span class="st">"2020s"</span>))</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>seasons_to_label <span class="ot">&lt;-</span> nba_data <span class="sc">%&gt;%</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Season <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"1998-99"</span>, <span class="st">"2023-24"</span>))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>custom_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1980s"</span> <span class="ot">=</span> <span class="st">"#1d428a"</span>,  <span class="co"># Blue</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1990s"</span> <span class="ot">=</span> <span class="st">"#c8102e"</span>,  <span class="co"># Red</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2000s"</span> <span class="ot">=</span> <span class="st">"#f58246"</span>,  <span class="co"># Orange</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2010s"</span> <span class="ot">=</span> <span class="st">"#666666"</span>,  <span class="co"># Gray</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2020s"</span> <span class="ot">=</span> <span class="st">"#06402b"</span>   <span class="co"># Green</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>my_caption <span class="ot">&lt;-</span> <span class="st">"basketball-reference  |  By: Aiden Feimer"</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nba_data, <span class="fu">aes</span>(<span class="at">x =</span> Pace, <span class="at">y =</span> PPP)) <span class="sc">+</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Decade), <span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> custom_colors, <span class="at">name =</span> <span class="st">"Decade"</span>) <span class="sc">+</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> seasons_to_label, </span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">label =</span> Season), </span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.3</span>, </span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Pre-2000 Defenses Wouldn't Be Able To Handle Today's Offenses"</span>,</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Teams Today Are Too Efficient For Early NBA Defenses"</span>,</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Pace (Possessions per 48 minutes)"</span>,</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Points Per Possession"</span>,</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> my_caption</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -474,6 +436,10 @@ Attaching package: 'gridExtra'</code></pre>
 </div>
 </div>
 </div>
+<p>It looks like the analytic looks at the game is paying off. The offenses are more efficient than ever in the 2020s. The 90s and 2000s saw the lowest pace of play and the lowest points per possession on average. Was this great defense, or was it slower offense and more twos?</p>
+<p>It’s unfair to say that today’s game has less defense played than the 90s according to stats. Defenses in the 90s could focus on guarding the paint while not having as big of a threat from outside the line.</p>
+<p>In today’s game every player on the court knows how to shoot the three. This spreads out the defense leaving more open space for the already elite NBA players to work with.</p>
+<p>Could a pre-2000 defense guard a high scoring offense in today’s game?</p>
 
 
 
